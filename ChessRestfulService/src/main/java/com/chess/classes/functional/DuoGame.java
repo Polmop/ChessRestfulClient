@@ -1,5 +1,9 @@
 package com.chess.classes.functional;
 
+import com.chess.classes.helpful.GameState;
+import com.chess.classes.helpful.JSONMessage;
+import com.chess.classes.helpful.JSONMessage.Topic;
+
 public class DuoGame extends RegisteredGame {
 	
 	
@@ -19,8 +23,6 @@ public class DuoGame extends RegisteredGame {
 		}
 	}
 	
-	
-	
 	/**
 	 * Gets engine move
 	 */
@@ -36,4 +38,21 @@ public class DuoGame extends RegisteredGame {
 		}
 		return null;
 	}
+	
+	public String parseSendMessageInDuoGame(JSONMessage jsonMessage){
+		if(jsonMessage.getTopic()==Topic.SEND_MESSAGE){
+			if( getStateOfGame() == GameState.AWAIT_ON_SECOND_PLAYER){
+				return "Your message is not accepted! Second player is not connected.";
+			}
+			setEngineMove(jsonMessage.getPlayerNumber(), jsonMessage.getMessage());
+		}
+		return "Game accepted your message";
+	}
+	
+	public JSONMessage parseGetMessageInDuoGame(JSONMessage jsonMessage){
+		String move = getOppositePlayerMove(jsonMessage.getPlayerNumber());
+		jsonMessage.setMessage(move);
+		return jsonMessage;
+	}
+	
 }

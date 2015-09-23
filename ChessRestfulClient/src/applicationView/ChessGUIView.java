@@ -1,37 +1,24 @@
 package applicationView;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
 import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
-import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URL;
-import java.rmi.UnknownHostException;
-import java.util.Enumeration;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.border.TitledBorder;
 
 import serverConnectors.GameRegistration;
 import serverConnectors.GetMoveFromServer;
 import serverConnectors.SendMoveToServer;
-
-import javax.swing.event.ChangeEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 
 public class ChessGUIView {
 
@@ -75,7 +62,7 @@ public class ChessGUIView {
 	private void initialize() {
 		frmChessConnectorClient = new JFrame();
 		frmChessConnectorClient.setTitle("Chess Connector Client");
-		frmChessConnectorClient.setBounds(100, 100, 502, 417);
+		frmChessConnectorClient.setBounds(100, 100, 1172, 417);
 		frmChessConnectorClient.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmChessConnectorClient.getContentPane().setLayout(null);
 		
@@ -190,10 +177,10 @@ public class ChessGUIView {
 						else if(detail[1].equals("2")){
 							informationLabel.setText("Engine register to Game "+detail[0]+ " as player with black chess");
 							sendButton.setEnabled(false); 
-							GetMoveFromServer gmfs = new GetMoveFromServer(gameNumber, playerNumber, informationLabel, sendButton);
-							Thread t1 = new Thread(gmfs);
-							t1.start();
 						} 
+						GetMoveFromServer gmfs = new GetMoveFromServer(gameNumber, playerNumber, informationLabel, sendButton);
+						Thread t1 = new Thread(gmfs);
+						t1.start();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						informationLabel.setText("Server is not working");
@@ -211,7 +198,7 @@ public class ChessGUIView {
 		lblStatus.setBounds(10, 356, 55, 16);
 		frmChessConnectorClient.getContentPane().add(lblStatus);
 		
-		informationLabel.setBounds(66, 356, 414, 16);
+		informationLabel.setBounds(66, 356, 1080, 16);
 		frmChessConnectorClient.getContentPane().add(informationLabel);
 		
 		doWysy³ki = new JTextField();
@@ -223,9 +210,6 @@ public class ChessGUIView {
 			public void actionPerformed(ActionEvent arg0) {				
 				sendButton.setEnabled(false); 
 				informationLabel.setText(SendMoveToServer.SendMove(gameNumber, playerNumber, doWysy³ki.getText().toString()));
-				GetMoveFromServer gmfs = new GetMoveFromServer(gameNumber, playerNumber, informationLabel, sendButton);
-				Thread t1 = new Thread(gmfs);
-				t1.start();
 			}
 		});
 		sendButton.setBounds(280, 298, 90, 28);

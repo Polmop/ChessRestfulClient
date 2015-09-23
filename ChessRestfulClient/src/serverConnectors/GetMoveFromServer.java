@@ -9,7 +9,20 @@ import java.net.URL;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import com.google.gson.Gson;
+
+import modelClasses.JSONMessage;
 import modelClasses.ServerDetails;
+import modelClasses.JSONMessage.EnergyOrNot;
+import modelClasses.JSONMessage.Topic;
+import modelClasses.JSONMessage.TypeOfGame;
 
 public class GetMoveFromServer implements Runnable{
 	
@@ -21,7 +34,6 @@ public class GetMoveFromServer implements Runnable{
 	
 	
 	public GetMoveFromServer(Integer gameNumber, Integer playerNumber, JLabel informationLabel, JButton buttonToEnable) {
-		// TODO Auto-generated constructor stub
 		this.gameNumber = gameNumber;
 		this.playerNumber = playerNumber;
 		this.informationLabel = informationLabel;
@@ -30,49 +42,49 @@ public class GetMoveFromServer implements Runnable{
 	
 	public void getMove(){
 
-		StringBuffer response = new StringBuffer();
 		int counter_of_connection = 0;
+		JSONMessage message = new JSONMessage();
+		message.setGameNumber(gameNumber);
+		message.setPlayerNumber(playerNumber);
+		message.setTypeOfGame(TypeOfGame.SINGLE);
+		message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
+		message.setTopic(Topic.GET_MESSAGE);
+		
+		Gson gson = new Gson();
+		
+		String responseString;
 		while(true){
 			try {
-				String url = ServerDetails.SERVER_ADDRESS + ServerDetails.SINGLE_GAME_GET_MOVE_SUFIX + 
-						gameNumber + "/" + playerNumber ;
+				String url = ServerDetails.SERVER_ADDRESS + ServerDetails.GET_MESSAGE ;
+				HttpPost post = new HttpPost(url);
 				
-				URL obj;
-					obj = new URL(url);
-			
-				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-				con.setRequestMethod("POST");
-				con.setReadTimeout(15000);
-				
-				String inputLine;
-				BufferedReader in = new BufferedReader(
-				        new InputStreamReader(con.getInputStream()));
-				while ((inputLine = in.readLine()) != null) {
-					response.append(inputLine);
-				}
-				in.close();
-				
-				//print result
-				System.out.println("Odpowiedz serwera to {" + response.toString()+"}");
-				break;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				counter_of_connection++;
-				if(counter_of_connection>=5){
-					System.out.println("Resource is not ready too long - Game over");
-					response.append("Game Over - Opponent walks away");
+				StringEntity postingString = new StringEntity(gson.toJson(message));//convert your message to json
+				post.setEntity(postingString);
+		        CloseableHttpClient httpClient = HttpClients.createDefault();
+				HttpResponse response = httpClient.execute(post);
+				responseString = new BasicResponseHandler().handleResponse(response);
+				JSONMessage messageFromServer = gson.fromJson(responseString, JSONMessage.class);
+				if(messageFromServer.getMessage() != null){
+					responseString = messageFromServer.getMessage();
 					break;
 				}
-				System.out.println("Resource is not ready - retry "+counter_of_connection+" time" );
-				//e.printStackTrace();
+			} catch (IOException e) {
+				counter_of_connection++;
+				if(counter_of_connection>=50){
+					responseString = "Game Over - Opponent walks away";
+					break;
+				}
 			}
 		}
-		informationLabel.setText("Ruch drugiego gracza to: " + response.toString());
+		informationLabel.setText("Ruch drugiego gracza to: " + responseString);
 		buttonToEnable.setEnabled(true);
 	}
 
 	@Override
 	public void run() {
-		getMove();
+		// Non stop getting messages. If one get - wait till next will come
+		while(true){
+			getMove();
+		}
 	}
 }

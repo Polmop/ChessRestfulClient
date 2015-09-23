@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chess.classes.functional.MessagesQueue;
-import com.chess.classes.helpful.GameSpecToReturn;
 
 /**
  * Handles requests for the application home page.
@@ -25,8 +24,7 @@ public class ManagmentController {
 	@RequestMapping(value = "/SubscribeTo/{SingleOrCluster}/{AsEnergySafeOrNot}", method = RequestMethod.POST)
 	public @ResponseBody String subscribeTo(Locale locale, Model model, @PathVariable String SingleOrCluster , @PathVariable String AsEnergySafeOrNot) {
 		if(SingleOrCluster.equals("Single")){
-			GameSpecToReturn gameSpecification = MessagesQueue.getInstance().registerEngineToDuoGame();
-			return gameSpecification.getGameNumber()+" "+gameSpecification.getPlayerNumber() ;
+			return MessagesQueue.getInstance().registerEngineToDuoGame();
 		}
 		return "null";
 	}
