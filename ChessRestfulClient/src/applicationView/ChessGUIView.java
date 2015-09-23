@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,12 +17,16 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
+import modelClasses.JSONMessage;
+import modelClasses.JSONMessage.EnergyOrNot;
+import modelClasses.JSONMessage.Topic;
 import serverConnectors.GameRegistration;
 import serverConnectors.GetMoveFromServer;
 import serverConnectors.SendMoveToServer;
 
 public class ChessGUIView {
 
+	private final static Logger LOGGER = Logger.getLogger(ChessGUIView.class.getName()); 
 	private JFrame frmChessConnectorClient;
 	private JTextField engineName;
 	private JTextField doWysy³ki;
@@ -103,17 +108,29 @@ public class ChessGUIView {
 		zagrajGreKlastrowa.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(zagrajGreKlastrowa.isSelected())
+				{
 					zagrajGreDuo.setSelected(false);
+					LOGGER.info("Game vs engine's  cluster is choosen");
+				}
 				else
+				{
 					zagrajGreDuo.setSelected(true);
+					LOGGER.info("Game vs another engine is choosen");
+				}
 			}
 		});
 		zagrajGreDuo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(zagrajGreDuo.isSelected())
+				{
 					zagrajGreKlastrowa.setSelected(false);
+					LOGGER.info("Game vs another engine is choosen");
+				}
 				else
+				{
 					zagrajGreKlastrowa.setSelected(true);
+					LOGGER.info("Game vs engine's  cluster is choosen");
+				}
 			}
 		});
 		
@@ -135,19 +152,29 @@ public class ChessGUIView {
 		zagrajGraEnergooszczdna.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if(zagrajGraEnergooszczdna.isSelected())
+				{
 					zagrajGreKlasyczna.setSelected(false);
+					LOGGER.info("Look on energy during game was choosen");
+				}
 				else
+				{
 					zagrajGreKlasyczna.setSelected(true);
+					LOGGER.info("Do not look on energy during game was choosen");
+				}
 			}
 		});
 		
 
 		zagrajGreKlasyczna.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if(zagrajGreKlasyczna.isSelected())
+				if(zagrajGreKlasyczna.isSelected()){
 					zagrajGraEnergooszczdna.setSelected(false);
-				else
+					LOGGER.info("Do not look on energy during game was choosen");
+				}
+				else{
 					zagrajGraEnergooszczdna.setSelected(true);
+					LOGGER.info("Look on energy during game was choosen");
+				}
 			}
 		});
 		zagrajGreKlasyczna.setSelected(true);
@@ -167,15 +194,18 @@ public class ChessGUIView {
 				if(zagrajGreDuo.isSelected())
 				{
 					try {
-						String registrationDetails = GameRegistration.registerToDuoGame("NotEnergy");
-						String[] detail = registrationDetails.split(" ");
-						gameNumber = Integer.parseInt(detail[0]);
-						playerNumber = Integer.parseInt(detail[1]);
-						if(detail[1].equals("1")){
-							informationLabel.setText("Engine register to Game "+detail[0]+ " as player with white chess");
+						JSONMessage returnMessage = new JSONMessage();
+						if(zagrajGreKlasyczna.isSelected())
+							returnMessage = GameRegistration.registerToDuoGame(EnergyOrNot.DONT_LOOK_ON_ENERGY);
+						else if(zagrajGraEnergooszczdna.isSelected())
+							returnMessage = GameRegistration.registerToDuoGame(EnergyOrNot.ENERGYSAFE);
+						gameNumber = returnMessage.getGameNumber();
+						playerNumber = returnMessage.getPlayerNumber();
+						if(playerNumber == 1){
+							informationLabel.setText("Engine register to Game " + gameNumber + " as player with white chess");
 						}
-						else if(detail[1].equals("2")){
-							informationLabel.setText("Engine register to Game "+detail[0]+ " as player with black chess");
+						else if(playerNumber == 2){
+							informationLabel.setText("Engine register to Game " + gameNumber + " as player with black chess");
 							sendButton.setEnabled(false); 
 						} 
 						GetMoveFromServer gmfs = new GetMoveFromServer(gameNumber, playerNumber, informationLabel, sendButton);
@@ -209,7 +239,8 @@ public class ChessGUIView {
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {				
 				sendButton.setEnabled(false); 
-				informationLabel.setText(SendMoveToServer.SendMove(gameNumber, playerNumber, doWysy³ki.getText().toString()));
+				informationLabel.setText(SendMoveToServer.sendMessage(gameNumber, playerNumber, Topic.SEND_MESSAGE, doWysy³ki.getText().toString()));
+				LOGGER.info("To server we sent message with move");
 			}
 		});
 		sendButton.setBounds(280, 298, 90, 28);

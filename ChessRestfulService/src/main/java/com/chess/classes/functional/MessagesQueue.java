@@ -3,6 +3,7 @@ package com.chess.classes.functional;
 import java.util.LinkedList;
 
 import com.chess.classes.helpful.GameState;
+import com.chess.classes.helpful.JSONMessage;
 
 
 public class MessagesQueue {
@@ -26,7 +27,7 @@ public class MessagesQueue {
 		return queue.get(NumberOfGame);
 	}
 	
-	public String registerEngineToDuoGame(){
+	public JSONMessage registerEngineToDuoGame(JSONMessage jsonMessage){
 		// poszukiwania czy nie ma silnika oczekujacego na towarzysza
 		for (int i=0; i<queue.size() ; i++) {
 			RegisteredGame registeredGame = queue.get(i);
@@ -34,11 +35,15 @@ public class MessagesQueue {
 			if(registeredGame.getStateOfGame().equals(GameState.AWAIT_ON_SECOND_PLAYER)){
 				/* Najpierw poszukaj gier gdzie brakuje tylko jednego gracza */
 				registeredGame.setStateOfGame(GameState.GAME_IN_PROGRESS);
-				return i+" 2";
+				jsonMessage.setGameNumber(i);
+				jsonMessage.setPlayerNumber(2);
+				return jsonMessage;
 			} else if(registeredGame.getStateOfGame().equals(GameState.AWAIT_ON_ENGINES)){
 				/*  Potem gier gdzie nie ma zadnego gracza i stoja puste ale jeszcze nie wyczyscil ich ChessGameCleaner */
 				registeredGame.setStateOfGame(GameState.AWAIT_ON_SECOND_PLAYER);
-				return i+" 1";
+				jsonMessage.setGameNumber(i);
+				jsonMessage.setPlayerNumber(1);
+				return jsonMessage;
 			}
 		}
 		// Jesli nic nie znalazles zaloz nowa gre
@@ -46,7 +51,9 @@ public class MessagesQueue {
 			DuoGame registeredGame = new DuoGame();
 			registeredGame.setStateOfGame(GameState.AWAIT_ON_SECOND_PLAYER);
 			queue.add(registeredGame);
-			return (queue.size()-1)+" 1";
+			jsonMessage.setGameNumber(queue.size()-1);
+			jsonMessage.setPlayerNumber(1);
+			return jsonMessage;
 		}
 	}
 	

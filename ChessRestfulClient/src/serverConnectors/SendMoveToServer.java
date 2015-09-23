@@ -20,15 +20,15 @@ import modelClasses.JSONMessage.TypeOfGame;
 import modelClasses.ServerDetails;
 
 public class SendMoveToServer {
-	public static String SendMove(Integer gameNumber, Integer playerNumber, String move){
+	public static String sendMessage(Integer gameNumber, Integer playerNumber, Topic topic, String messageContent){
 
 		JSONMessage message = new JSONMessage();
 		message.setGameNumber(gameNumber);
 		message.setPlayerNumber(playerNumber);
-		message.setMessage(move);
+		message.setMessage(messageContent);
 		message.setTypeOfGame(TypeOfGame.SINGLE);
 		message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
-		message.setTopic(Topic.SEND_MESSAGE);
+		message.setTopic(topic);
 		
 		Gson gson = new Gson();
 		
