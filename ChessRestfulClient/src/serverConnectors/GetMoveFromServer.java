@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 
 import modelClasses.JSONMessage;
 import modelClasses.ServerDetails;
-import modelClasses.JSONMessage.EnergyOrNot;
+//import modelClasses.JSONMessage.EnergyOrNot;
 import modelClasses.JSONMessage.Topic;
 import modelClasses.JSONMessage.TypeOfGame;
 
@@ -47,7 +47,7 @@ public class GetMoveFromServer implements Runnable{
 		message.setGameNumber(gameNumber);
 		message.setPlayerNumber(playerNumber);
 		message.setTypeOfGame(TypeOfGame.SINGLE);
-		message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
+		//message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
 		message.setTopic(Topic.GET_MESSAGE);
 		
 		Gson gson = new Gson();

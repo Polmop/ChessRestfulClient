@@ -1,24 +1,26 @@
 package modelClasses;
 
+import jPapiManager.PapiEventInfo;
+
 public class JSONMessage {
 
 	private TypeOfGame typeOfGame;
-	private EnergyOrNot energyOrNot;
+	//private EnergyOrNot energyOrNot;
 	private Topic topic;
 	private String message;
 	private Integer gameNumber;
 	private Integer playerNumber;
-	
+	private PapiEventInfo eventToMeasure;
 	
 	public enum TypeOfGame {
 		SINGLE,
 		CLUSTER;
 	}
 	
-	public enum EnergyOrNot {
+	/*public enum EnergyOrNot {
 		ENERGYSAFE,
 		DONT_LOOK_ON_ENERGY;
-	}
+	}*/
 
 	public enum Topic {
 		REGISTER,
@@ -35,13 +37,13 @@ public class JSONMessage {
 		this.typeOfGame = typeOfGame;
 	}
 
-	public EnergyOrNot getEnergyOrNot() {
+	/*public EnergyOrNot getEnergyOrNot() {
 		return energyOrNot;
 	}
 
 	public void setEnergyOrNot(EnergyOrNot energyOrNot) {
 		this.energyOrNot = energyOrNot;
-	}
+	}*/
 
 	public Topic getTopic() {
 		return topic;
@@ -74,7 +76,14 @@ public class JSONMessage {
 	public void setPlayerNumber(Integer playerNumber) {
 		this.playerNumber = playerNumber;
 	}
+		
+	public PapiEventInfo getEventToMeasure() {
+		return eventToMeasure;
+	}
 	
+	public void setEventToMeasure(PapiEventInfo eventToMeasure)	{
+		this.eventToMeasure = eventToMeasure;
+	}
 	
 	
 	

@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 import modelClasses.JSONMessage;
 import modelClasses.ServerDetails;
-import modelClasses.JSONMessage.EnergyOrNot;
+//import modelClasses.JSONMessage.EnergyOrNot;
 import modelClasses.JSONMessage.Topic;
 import modelClasses.JSONMessage.TypeOfGame;
 
@@ -27,13 +27,13 @@ public class GameRegistration {
 	
 	private final static Logger LOGGER = Logger.getLogger(GameRegistration.class.getName()); 
 	
-	public static JSONMessage registerToDuoGame(EnergyOrNot EnergySafeOrNot) throws Exception {
+	public static JSONMessage registerToDuoGame(/*EnergyOrNot EnergySafeOrNot*/) throws Exception {
 
 		String url = ServerDetails.SERVER_ADDRESS + ServerDetails.SUBSCRIBE_SUFIX;
 		
 		JSONMessage message = new JSONMessage();
 		message.setTypeOfGame(TypeOfGame.SINGLE);
-		message.setEnergyOrNot(EnergySafeOrNot);
+		//message.setEnergyOrNot(EnergySafeOrNot);
 		message.setTopic(Topic.REGISTER);
 		
 		Gson gson = new Gson();

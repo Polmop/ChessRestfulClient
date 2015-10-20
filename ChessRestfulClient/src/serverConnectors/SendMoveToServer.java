@@ -14,7 +14,7 @@ import org.apache.http.impl.client.HttpClients;
 import com.google.gson.Gson;
 
 import modelClasses.JSONMessage;
-import modelClasses.JSONMessage.EnergyOrNot;
+//import modelClasses.JSONMessage.EnergyOrNot;
 import modelClasses.JSONMessage.Topic;
 import modelClasses.JSONMessage.TypeOfGame;
 import modelClasses.ServerDetails;
@@ -27,7 +27,7 @@ public class SendMoveToServer {
 		message.setPlayerNumber(playerNumber);
 		message.setMessage(messageContent);
 		message.setTypeOfGame(TypeOfGame.SINGLE);
-		message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
+		//message.setEnergyOrNot(EnergyOrNot.DONT_LOOK_ON_ENERGY);
 		message.setTopic(topic);
 		
 		Gson gson = new Gson();

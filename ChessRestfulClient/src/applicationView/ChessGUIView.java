@@ -18,7 +18,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
 import modelClasses.JSONMessage;
-import modelClasses.JSONMessage.EnergyOrNot;
+//import modelClasses.JSONMessage.EnergyOrNot;
 import modelClasses.JSONMessage.Topic;
 import serverConnectors.GameRegistration;
 import serverConnectors.GetMoveFromServer;
@@ -29,8 +29,8 @@ public class ChessGUIView {
 	private final static Logger LOGGER = Logger.getLogger(ChessGUIView.class.getName()); 
 	private JFrame frmChessConnectorClient;
 	private JTextField engineName;
-	private JTextField doWysy³ki;
-	JButton exitGameButton = new JButton("Wyjd\u017A");
+	private JTextField doWysylki;
+	JButton exitGameButton = new JButton("Wyjdz");
 	JButton sendButton = new JButton("Wyslij");
 	
 	private Integer gameNumber=null;
@@ -195,10 +195,10 @@ public class ChessGUIView {
 				{
 					try {
 						JSONMessage returnMessage = new JSONMessage();
-						if(zagrajGreKlasyczna.isSelected())
+						/*if(zagrajGreKlasyczna.isSelected())
 							returnMessage = GameRegistration.registerToDuoGame(EnergyOrNot.DONT_LOOK_ON_ENERGY);
 						else if(zagrajGraEnergooszczdna.isSelected())
-							returnMessage = GameRegistration.registerToDuoGame(EnergyOrNot.ENERGYSAFE);
+							returnMessage = GameRegistration.registerToDuoGame(EnergyOrNot.ENERGYSAFE);*/
 						gameNumber = returnMessage.getGameNumber();
 						playerNumber = returnMessage.getPlayerNumber();
 						if(playerNumber == 1){
@@ -231,15 +231,15 @@ public class ChessGUIView {
 		informationLabel.setBounds(66, 356, 1080, 16);
 		frmChessConnectorClient.getContentPane().add(informationLabel);
 		
-		doWysy³ki = new JTextField();
-		doWysy³ki.setBounds(146, 298, 122, 28);
-		frmChessConnectorClient.getContentPane().add(doWysy³ki);
-		doWysy³ki.setColumns(10);
+		doWysylki = new JTextField();
+		doWysylki.setBounds(146, 298, 122, 28);
+		frmChessConnectorClient.getContentPane().add(doWysylki);
+		doWysylki.setColumns(10);
 		
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {				
 				sendButton.setEnabled(false); 
-				informationLabel.setText(SendMoveToServer.sendMessage(gameNumber, playerNumber, Topic.SEND_MESSAGE, doWysy³ki.getText().toString()));
+				informationLabel.setText(SendMoveToServer.sendMessage(gameNumber, playerNumber, Topic.SEND_MESSAGE, doWysylki.getText().toString()));
 				LOGGER.info("To server we sent message with move");
 			}
 		});
