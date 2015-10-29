@@ -1,0 +1,13 @@
+//Ustawienie linkowania biblioteki PAPI (aby byl widoczny w calym systemie)
+cd /usr/lib
+ln -s /usr/local/lib/libpapi.so.5.4.1.0 libpapi.so.5.4.1.0
+
+//Kopiowanie przekompilowanej biblioteki PapiManagera
+cp /home/bulczi/workspace/PapiManager/Debug/libPapiManager.so /usr/lib/libPapiManager.so
+//Mozna tez ewentualnie zrobic link jak dla libpapi.so
+
+//Problem z odczytywaniem MSRow
+sudo modprobe msr
+
+//Generowanie klasy w JAVA dla C++ z wykorzystaniem JNA uzywajac JNAeratora
+java -jar jnaerator-0.11-shaded.jar -library PapiManager CPapiManager.h -o . -v -noJar -noComp -f

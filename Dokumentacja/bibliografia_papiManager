@@ -1,0 +1,14 @@
+1. JNA GIThub - https://github.com/twall/jna
+2. JNA API Documentation - https://jna.java.net/javadoc/overview-summary.html
+3. Simplify Native Code Access with JNA - https://today.java.net/article/2009/11/11/simplify-native-code-access-jna
+4. Java interoperation with a Native DLL using JNA - http://www.viaboxx.de/code/java-interoperation-with-a-native-dll-using-jna/
+5. PAPI Homepage - http://icl.cs.utk.edu/papi/
+6. Manual page - PAPI - http://geco.mines.edu/papi/html/papi.html
+7. JNA Examples - http://www.eshayne.com/jnaex/index.html
+8. Analyzing the energy consumption of an application with EZTrace - http://eztrace.gforge.inria.fr/tutorials/tutorial_rapl/
+9. PAPI Uder Guide - https://www.lrz.de/services/software/programmierung/papi/PAPI_USER_GUIDE_36.pdf
++ publikacje ze strony papi
++ cos o MSR
++ cos o RAPL
++ cos o CUDA (power monitoring)
++ cos o NVML
